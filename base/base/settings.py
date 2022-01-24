@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # apps
     'books.apps.BooksConfig',
+    'grpc_server.apps.GrpcServerConfig',
 ]
 
 MIDDLEWARE = [

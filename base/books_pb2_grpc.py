@@ -5,7 +5,7 @@ import grpc
 import books_pb2 as books__pb2
 
 
-class ProjectControllerStub(object):
+class BookControllerStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -15,23 +15,23 @@ class ProjectControllerStub(object):
             channel: A grpc.Channel.
         """
         self.ListBook = channel.unary_stream(
-                '/ProjectController/ListBook',
+                '/BookController/ListBook',
                 request_serializer=books__pb2.BookListRequest.SerializeToString,
                 response_deserializer=books__pb2.BookResponse.FromString,
                 )
         self.CreateBook = channel.unary_unary(
-                '/ProjectController/CreateBook',
+                '/BookController/CreateBook',
                 request_serializer=books__pb2.BookCreateRequest.SerializeToString,
                 response_deserializer=books__pb2.BookResponse.FromString,
                 )
         self.RetrieveBook = channel.unary_unary(
-                '/ProjectController/RetrieveBook',
+                '/BookController/RetrieveBook',
                 request_serializer=books__pb2.BookRetrieveRequest.SerializeToString,
                 response_deserializer=books__pb2.BookResponse.FromString,
                 )
 
 
-class ProjectControllerServicer(object):
+class BookControllerServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def ListBook(self, request, context):
@@ -53,7 +53,7 @@ class ProjectControllerServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_ProjectControllerServicer_to_server(servicer, server):
+def add_BookControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'ListBook': grpc.unary_stream_rpc_method_handler(
                     servicer.ListBook,
@@ -72,12 +72,12 @@ def add_ProjectControllerServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'ProjectController', rpc_method_handlers)
+            'BookController', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class ProjectController(object):
+class BookController(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -91,7 +91,7 @@ class ProjectController(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/ProjectController/ListBook',
+        return grpc.experimental.unary_stream(request, target, '/BookController/ListBook',
             books__pb2.BookListRequest.SerializeToString,
             books__pb2.BookResponse.FromString,
             options, channel_credentials,
@@ -108,7 +108,7 @@ class ProjectController(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ProjectController/CreateBook',
+        return grpc.experimental.unary_unary(request, target, '/BookController/CreateBook',
             books__pb2.BookCreateRequest.SerializeToString,
             books__pb2.BookResponse.FromString,
             options, channel_credentials,
@@ -125,7 +125,7 @@ class ProjectController(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ProjectController/RetrieveBook',
+        return grpc.experimental.unary_unary(request, target, '/BookController/RetrieveBook',
             books__pb2.BookRetrieveRequest.SerializeToString,
             books__pb2.BookResponse.FromString,
             options, channel_credentials,
