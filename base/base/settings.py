@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # apps
-    'books.apps.BooksConfig',
-    'grpc_server.apps.GrpcServerConfig',
+    'books',
+    'grpc_server',
 ]
 
 MIDDLEWARE = [

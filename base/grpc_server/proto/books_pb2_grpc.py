@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import books_pb2 as books__pb2
+from grpc_server.proto import books_pb2 as grpc__server_dot_proto_dot_books__pb2
 
 
 class BookControllerStub(object):
@@ -16,18 +16,18 @@ class BookControllerStub(object):
         """
         self.ListBook = channel.unary_stream(
                 '/BookController/ListBook',
-                request_serializer=books__pb2.BookListRequest.SerializeToString,
-                response_deserializer=books__pb2.BookResponse.FromString,
+                request_serializer=grpc__server_dot_proto_dot_books__pb2.BookListRequest.SerializeToString,
+                response_deserializer=grpc__server_dot_proto_dot_books__pb2.BookResponse.FromString,
                 )
         self.CreateBook = channel.unary_unary(
                 '/BookController/CreateBook',
-                request_serializer=books__pb2.BookCreateRequest.SerializeToString,
-                response_deserializer=books__pb2.BookResponse.FromString,
+                request_serializer=grpc__server_dot_proto_dot_books__pb2.BookCreateRequest.SerializeToString,
+                response_deserializer=grpc__server_dot_proto_dot_books__pb2.BookResponse.FromString,
                 )
         self.RetrieveBook = channel.unary_unary(
                 '/BookController/RetrieveBook',
-                request_serializer=books__pb2.BookRetrieveRequest.SerializeToString,
-                response_deserializer=books__pb2.BookResponse.FromString,
+                request_serializer=grpc__server_dot_proto_dot_books__pb2.BookRetrieveRequest.SerializeToString,
+                response_deserializer=grpc__server_dot_proto_dot_books__pb2.BookResponse.FromString,
                 )
 
 
@@ -57,18 +57,18 @@ def add_BookControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'ListBook': grpc.unary_stream_rpc_method_handler(
                     servicer.ListBook,
-                    request_deserializer=books__pb2.BookListRequest.FromString,
-                    response_serializer=books__pb2.BookResponse.SerializeToString,
+                    request_deserializer=grpc__server_dot_proto_dot_books__pb2.BookListRequest.FromString,
+                    response_serializer=grpc__server_dot_proto_dot_books__pb2.BookResponse.SerializeToString,
             ),
             'CreateBook': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateBook,
-                    request_deserializer=books__pb2.BookCreateRequest.FromString,
-                    response_serializer=books__pb2.BookResponse.SerializeToString,
+                    request_deserializer=grpc__server_dot_proto_dot_books__pb2.BookCreateRequest.FromString,
+                    response_serializer=grpc__server_dot_proto_dot_books__pb2.BookResponse.SerializeToString,
             ),
             'RetrieveBook': grpc.unary_unary_rpc_method_handler(
                     servicer.RetrieveBook,
-                    request_deserializer=books__pb2.BookRetrieveRequest.FromString,
-                    response_serializer=books__pb2.BookResponse.SerializeToString,
+                    request_deserializer=grpc__server_dot_proto_dot_books__pb2.BookRetrieveRequest.FromString,
+                    response_serializer=grpc__server_dot_proto_dot_books__pb2.BookResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -92,8 +92,8 @@ class BookController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/BookController/ListBook',
-            books__pb2.BookListRequest.SerializeToString,
-            books__pb2.BookResponse.FromString,
+            grpc__server_dot_proto_dot_books__pb2.BookListRequest.SerializeToString,
+            grpc__server_dot_proto_dot_books__pb2.BookResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -109,8 +109,8 @@ class BookController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/BookController/CreateBook',
-            books__pb2.BookCreateRequest.SerializeToString,
-            books__pb2.BookResponse.FromString,
+            grpc__server_dot_proto_dot_books__pb2.BookCreateRequest.SerializeToString,
+            grpc__server_dot_proto_dot_books__pb2.BookResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -126,7 +126,7 @@ class BookController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/BookController/RetrieveBook',
-            books__pb2.BookRetrieveRequest.SerializeToString,
-            books__pb2.BookResponse.FromString,
+            grpc__server_dot_proto_dot_books__pb2.BookRetrieveRequest.SerializeToString,
+            grpc__server_dot_proto_dot_books__pb2.BookResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -9,3 +9,6 @@ class Book(models.Model):
     pages = models.PositiveIntegerField()
     title = models.CharField(max_length=100)
     year = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f'{self.title}'
