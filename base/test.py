@@ -30,6 +30,13 @@ def test_create_book():
 
     assert response.title == 'Test Book'
 
-test_retrieve_book()
-test_list_books()
-test_create_book()
+def test_list_books_per_year():
+    service = BookService()
+    request = BookListRequest(start=600, end=2010)
+    response = service.ListBook(request, None)
+    print((next(response)))
+
+# test_retrieve_book()
+# test_list_books()
+# test_create_book()
+test_list_books_per_year()

@@ -1,31 +1,51 @@
 import os
+from turtle import title
+from typing import Counter
 import grpc
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "base.settings")
 django.setup()
 
-from grpc_server.proto import books_pb2_grpc
+from grpc_server.proto import books_pb2_grpc, books_pb2
 from concurrent import futures
 from books.models import Book
-
+from django.db.models import Q
 
 class BookService(
     books_pb2_grpc.BookControllerServicer
 ):
     queryset = Book.objects
+
     def ListBook(self, request, context):
-        # return self.queryset.all()
-        for book in self.queryset.all():
-            yield book
-
-
-
-
-
+        if request.start:
+            filter = Q(year__gte=request.start) & Q(year__lte=request.end)
+            for book in self.queryset.filter(filter):
+                yield books_pb2.BookResponse(
+                    book_id = book.id,
+                    author = book.author,
+                    country = book.country,
+                    language = book.language,
+                    link = book.link,
+                    pages = book.pages,
+                    title = book.title,
+                    year = book.year,
+                )
+        else:
+            for book in self.queryset.all():
+                yield books_pb2.BookResponse(
+                    book_id = book.id,
+                    author = book.author,
+                    country = book.country,
+                    language = book.language,
+                    link = book.link,
+                    pages = book.pages,
+                    title = book.title,
+                    year = book.year,
+                )
 
     def CreateBook(self, request, context):
-        return self.queryset.create(
+        book = self.queryset.create(
             author = request.author,
             country = request.country,
             language = request.language,
@@ -34,9 +54,31 @@ class BookService(
             title = request.title,
             year = request.year,
         )
+        return books_pb2.BookResponse(
+            book_id = book.id,
+            author = book.author,
+            country = book.country,
+            language = book.language,
+            link = book.link,
+            pages = book.pages,
+            title = book.title,
+            year = book.year,
+        )
+ 
 
     def RetrieveBook(self, request, context):
-        return self.queryset.get(id=request.book_id)
+        book = self.queryset.get(id=request.book_id)
+        
+        return books_pb2.BookResponse(
+            book_id = book.id,
+            author = book.author,
+            country = book.country,
+            language = book.language,
+            link = book.link,
+            pages = book.pages,
+            title = book.title,
+            year = book.year,
+        )
  
 
 
