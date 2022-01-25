@@ -1,6 +1,4 @@
 import os
-from turtle import title
-from typing import Counter
 import grpc
 import django
 
@@ -22,47 +20,48 @@ class BookService(
             filter = Q(year__gte=request.start) & Q(year__lte=request.end)
             for book in self.queryset.filter(filter):
                 yield books_pb2.BookResponse(
-                    book_id = book.id,
-                    author = book.author,
-                    country = book.country,
-                    language = book.language,
-                    link = book.link,
-                    pages = book.pages,
-                    title = book.title,
-                    year = book.year,
+                    book_id=book.id,
+                    author=book.author,
+                    country=book.country,
+                    language=book.language,
+                    link=book.link,
+                    pages=book.pages,
+                    title=book.title,
+                    year=book.year,
                 )
+
         else:
             for book in self.queryset.all():
                 yield books_pb2.BookResponse(
-                    book_id = book.id,
-                    author = book.author,
-                    country = book.country,
-                    language = book.language,
-                    link = book.link,
-                    pages = book.pages,
-                    title = book.title,
-                    year = book.year,
+                    book_id=book.id,
+                    author=book.author,
+                    country=book.country,
+                    language=book.language,
+                    link=book.link,
+                    pages=book.pages,
+                    title=book.title,
+                    year=book.year,
                 )
 
     def CreateBook(self, request, context):
         book = self.queryset.create(
-            author = request.author,
-            country = request.country,
-            language = request.language,
-            link = request.link,
-            pages = request.pages,
-            title = request.title,
-            year = request.year,
+            author=request.author,
+            country=request.country,
+            language=request.language,
+            link=request.link,
+            pages=request.pages,
+            title=request.title,
+            year=request.year,
         )
         return books_pb2.BookResponse(
-            book_id = book.id,
-            author = book.author,
-            country = book.country,
-            language = book.language,
-            link = book.link,
-            pages = book.pages,
-            title = book.title,
-            year = book.year,
+            book_id=book.id,
+            author=book.author,
+            country=book.country,
+            language=book.language,
+            link=book.link,
+            pages=book.pages,
+            title=book.title,
+            year=book.year,
         )
  
 
@@ -70,14 +69,14 @@ class BookService(
         book = self.queryset.get(id=request.book_id)
         
         return books_pb2.BookResponse(
-            book_id = book.id,
-            author = book.author,
-            country = book.country,
-            language = book.language,
-            link = book.link,
-            pages = book.pages,
-            title = book.title,
-            year = book.year,
+            book_id=book.id,
+            author=book.author,
+            country=book.country,
+            language=book.language,
+            link=book.link,
+            pages=book.pages,
+            title=book.title,
+            year=book.year,
         )
  
 

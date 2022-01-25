@@ -1,12 +1,6 @@
 import grpc
 from protos import books_pb2_grpc, books_pb2
 
-
-
-# response = stub.ListBook(
-#     books_pb2.BookListRequest(start=2020, end=2099), None
-# )
-# print(len(list(response)))
 with grpc.insecure_channel('127.0.0.1:50051') as channel:
     stub = books_pb2_grpc.BookControllerStub(channel)
     response = stub.ListBook(
@@ -23,13 +17,13 @@ with grpc.insecure_channel('127.0.0.1:50051') as channel:
     print(f'[+] Retrieve book id=5: {response}')
     response = stub.CreateBook(
         books_pb2.BookCreateRequest(
-            author = "Test Author",
-            country = "Test country",
-            language = "Test Language",
-            link = "https://www.test.com",
-            pages = 595,
-            title = "Test Book",
-            year = 605,
+            author="Test Author",
+            country="Test country",
+            language="Test Language",
+            link="https://www.test.com",
+            pages=595,
+            title="Test Book",
+            year=605,
         )
     )
     print(f'[+] Create book: {response}')
