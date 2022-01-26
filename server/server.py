@@ -2,7 +2,7 @@ import os
 import grpc
 import django
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "base.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 django.setup()
 
 from grpc_server.proto import books_pb2_grpc, books_pb2

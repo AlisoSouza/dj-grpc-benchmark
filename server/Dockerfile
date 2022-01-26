@@ -1,0 +1,23 @@
+FROM python:3.6-slim
+
+ENV WORKDIR /home/app
+WORKDIR $WORKDIR
+
+RUN apt-get update \
+ && apt-get install --no-install-recommends --no-install-suggests -y apt-utils \
+ && apt-get install --no-install-recommends --no-install-suggests -y gcc bzip2 git curl nginx libpq-dev gettext \
+    libgdal-dev python3-cffi python3-gdal vim build-essential
+
+RUN  pip install -U pip==21.2.2 setuptools==57.4.0
+RUN pip install poetry==1.1.12
+COPY pyproject.toml pyproject.toml
+COPY poetry.lock poetry.lock
+
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-ansi
+
+COPY . .
+
+RUN chmod +x ./run.sh
+EXPOSE 5050
+ENTRYPOINT ["./run.sh"]

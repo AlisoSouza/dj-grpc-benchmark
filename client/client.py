@@ -1,7 +1,7 @@
 import grpc
 from protos import books_pb2_grpc, books_pb2
 
-with grpc.insecure_channel('127.0.0.1:50051') as channel:
+with grpc.insecure_channel('127.0.0.1:5050') as channel:
     stub = books_pb2_grpc.BookControllerStub(channel)
     response = stub.ListBook(
         books_pb2.BookListRequest(start=605, end=1995), None

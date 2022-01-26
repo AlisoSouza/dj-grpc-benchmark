@@ -1,0 +1,12 @@
+version: '3.6'
+
+services:
+  grpcapp:
+    restart: on-failure
+    build: .
+    container_name: dj_grpc_benchmark
+    volumes: 
+      - ./server:/app
+    ports:
+      - 5050:50051
+      
