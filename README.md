@@ -1,30 +1,23 @@
 # dj-grpc-benchmark
 
-Requirements:
+# Run server
 
 ```sh
-python = "^3.9"
-Django = "2.2.17"
-grpcio-tools = "^1.43.0"
-djangorestframework = "^3.13.1"
-djangogrpcframework = "^0.2.1"
-
+cd server
 ```
 
-## Run gRPC server
+Para escolher qual servidor vai ser executado edite o arquivo run.sh
+  - gRPC server: `python server.py`
+  - gGRPC server w/ `djangogrpcframework`: `python manage.py grpcrunserver`
 
 ```sh
-python base/server.py
-```
-
-## Run gGRPC server w/ `djangogrpcframework`
-
-```sh
-python base/manage.py grpcrunserver --dev
+docker-compose build
+docker-compose up
 ```
 
 ## Run client
 
 ```sh
+cd client
 python client/client.py
 ```
