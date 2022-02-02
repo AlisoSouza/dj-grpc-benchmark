@@ -16,7 +16,7 @@ class BookService(
     queryset = Book.objects
 
     def ListBook(self, request, context):
-        if request.start:
+        if request.start and request.end:
             filter = Q(year__gte=request.start) & Q(year__lte=request.end)
             for book in self.queryset.filter(filter):
                 yield books_pb2.BookResponse(
