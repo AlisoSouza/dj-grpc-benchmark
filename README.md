@@ -178,3 +178,18 @@ def serve():
 ### Serializer
 
 No exemplo não foram utilizados `Serializers`
+
+### Benchmark
+
+Ambos os servers rodando num container limitado a 0.5 de um núcleo de um processador i5 e 128MB de ram.
+
+Foi feito um disparo de 500 requisições no método `RetrieveBook` com `book_id` = 1 como parâmetro.
+
+**Com o Framework:**
+
+![com o framework](/imgs/com_framework.png)
+
+**Sem o Framework:**
+
+![sem o framework](/imgs/sem_framework.png)
+
