@@ -40,7 +40,7 @@ def ssl_client(path, port, cert):
     print(f'[+] List books: {len(list(response))}')
 
 if __name__ == "__main__":
-    # insecure_client("127.0.0.1","5050")
+    # insecure_client("127.0.0.1","50051")
     ssl_client("localhost","50051", "djgrpc.crt")
 
 # import grpc

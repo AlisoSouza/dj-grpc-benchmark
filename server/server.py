@@ -5,6 +5,8 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 django.setup()
 
+
+from django.conf import settings
 from grpc_server.proto import books_pb2_grpc, books_pb2
 from concurrent import futures
 from books.models import Book
@@ -111,5 +113,9 @@ def secure_serve():
     server.wait_for_termination()
 
 if __name__ == "__main__":
-    # serve()
-    secure_serve()
+    if settings.CERTIFICATE_GRPC_CRT and settings.CERTIFICATE_GRPC_KEY:
+        print("Secure")
+        secure_serve()
+    else:
+        print("Insecure")
+        serve()
