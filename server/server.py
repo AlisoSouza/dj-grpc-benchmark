@@ -92,5 +92,24 @@ def serve():
     print(f"Running server on port {port}")
     server.wait_for_termination()
 
+def secure_serve():
+    port = "[::]:50051"
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    books_pb2_grpc.add_BookControllerServicer_to_server(
+        BookService(), server
+    )
+    with open('djgrpc.key', 'rb') as f:
+        private_key = f.read()
+    with open('djgrpc.crt', 'rb') as f:
+        certificate_chain = f.read()
+    server_credentials = grpc.ssl_server_credentials( ( (private_key, certificate_chain), ) )
+    # Adding GreeterServicer to server omitted
+    server.add_secure_port("[::]:50051", server_credentials)
+    server.start()
+    print(f"Running server on port {port}")
+    # Server sleep omitted
+    server.wait_for_termination()
+
 if __name__ == "__main__":
-    serve()
+    # serve()
+    secure_serve()
