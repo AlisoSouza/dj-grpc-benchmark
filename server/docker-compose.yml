@@ -9,4 +9,6 @@ services:
       - ./server:/app
     ports:
       - 5050:50051
-      
+    environment:
+      - CERTIFICATE_GRPC_CRT=${CERTIFICATE_GRPC_CRT}
+      - CERTIFICATE_GRPC_KEY=${CERTIFICATE_GRPC_KEY}
