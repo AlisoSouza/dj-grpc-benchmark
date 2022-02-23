@@ -100,9 +100,10 @@ def secure_serve():
     books_pb2_grpc.add_BookControllerServicer_to_server(
         BookService(), server
     )
-    with open('djgrpc.key', 'rb') as f:
+
+    with open(settings.CERTIFICATE_GRPC_KEY, 'rb') as f:
         private_key = f.read()
-    with open('djgrpc.crt', 'rb') as f:
+    with open(settings.CERTIFICATE_GRPC_CRT, 'rb') as f:
         certificate_chain = f.read()
     server_credentials = grpc.ssl_server_credentials( ( (private_key, certificate_chain), ) )
     # Adding GreeterServicer to server omitted
@@ -111,6 +112,7 @@ def secure_serve():
     print(f"Running server on port {port}")
     # Server sleep omitted
     server.wait_for_termination()
+    
 
 if __name__ == "__main__":
     if settings.CERTIFICATE_GRPC_CRT and settings.CERTIFICATE_GRPC_KEY:
