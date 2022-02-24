@@ -12,6 +12,10 @@ RUN  pip install -U pip==21.2.2 setuptools==57.4.0
 RUN pip install poetry==1.1.12
 COPY pyproject.toml pyproject.toml
 COPY poetry.lock poetry.lock
+COPY djgrpc.crt djgrpc.crt
+COPY djgrpc.key djgrpc.key
+RUN chown root:root djgrpc.*
+RUN chmod 600 djgrpc.*
 
 RUN poetry config virtualenvs.create false \
   && poetry install --no-interaction --no-ansi

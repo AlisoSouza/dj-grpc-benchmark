@@ -11,7 +11,17 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import environ
+from pathlib import Path
 
+environ.Env.read_env(env_file=(environ.Path(__file__) - 2)(".env"))
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    CERTIFICATE_GRPC_CRT=(str, None),
+    CERTIFICATE_GRPC_KEY=(str, None),
+)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +33,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'h6ja_2f@9sp+&#k246f_64rs*q@c$3w559=4_0l$rq8eq@9d57'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -122,3 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# SSL CERTIFICATE
+CERTIFICATE_GRPC_CRT = env.str("CERTIFICATE_GRPC_CRT")
+CERTIFICATE_GRPC_KEY = env.str("CERTIFICATE_GRPC_KEY")
