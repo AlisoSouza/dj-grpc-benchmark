@@ -41,12 +41,4 @@ def ssl_client(path, port, cert):
 
 if __name__ == "__main__":
     # insecure_client("127.0.0.1","50051")
-    ssl_client("localhost","50051", "djgrpc.crt")
-
-# import grpc
-# import helloworld_pb2
-
-# with open('roots.pem', 'rb') as f:
-#     creds = grpc.ssl_channel_credentials(f.read())
-# channel = grpc.secure_channel('myservice.example.com:443', creds)
-# stub = helloworld_pb2.GreeterStub(channel)
+    ssl_client("localhost","5050", "djgrpc.crt")
