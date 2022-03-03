@@ -11,6 +11,8 @@ from grpc_server.proto import books_pb2_grpc, books_pb2
 from concurrent import futures
 from books.models import Book
 from django.db.models import Q
+from grpc_reflection.v1alpha import reflection
+
 
 class BookService(
     books_pb2_grpc.BookControllerServicer
@@ -89,6 +91,11 @@ def serve():
     books_pb2_grpc.add_BookControllerServicer_to_server(
         BookService(), server
     )
+    SERVICE_NAMES = (
+        books_pb2.DESCRIPTOR.services_by_name['BookController'].full_name,
+        reflection.SERVICE_NAME,
+    )
+    reflection.enable_server_reflection(SERVICE_NAMES, server)
     server.add_insecure_port(port)
     server.start()
     print(f"Running server on port {port}")
