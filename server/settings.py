@@ -21,6 +21,7 @@ env = environ.Env(
     DEBUG=(bool, False),
     CERTIFICATE_GRPC_CRT=(str, None),
     CERTIFICATE_GRPC_KEY=(str, None),
+    CERTIFICATE_GRPC_ROOT=(str, None)
 )
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -136,3 +137,4 @@ STATIC_URL = '/static/'
 # SSL CERTIFICATE
 CERTIFICATE_GRPC_CRT = env.str("CERTIFICATE_GRPC_CRT")
 CERTIFICATE_GRPC_KEY = env.str("CERTIFICATE_GRPC_KEY")
+CERTIFICATE_GRPC_ROOT = env.str("CERTIFICATE_GRPC_ROOT")

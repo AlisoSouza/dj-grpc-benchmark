@@ -1,6 +1,7 @@
 import os
 import grpc
 import django
+import sys
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 django.setup()
@@ -107,12 +108,16 @@ def secure_serve():
     books_pb2_grpc.add_BookControllerServicer_to_server(
         BookService(), server
     )
-
     with open(settings.CERTIFICATE_GRPC_KEY, 'rb') as f:
         private_key = f.read()
     with open(settings.CERTIFICATE_GRPC_CRT, 'rb') as f:
         certificate_chain = f.read()
-    server_credentials = grpc.ssl_server_credentials( ( (private_key, certificate_chain), ) )
+    with open(settings.CERTIFICATE_GRPC_ROOT, 'rb') as f:
+        root_ca = f.read() 
+    server_credentials = grpc.ssl_server_credentials(
+        ((private_key, certificate_chain), ),
+        root_certificates=root_ca,
+        require_client_auth=True)
     # Adding GreeterServicer to server omitted
     server.add_secure_port("[::]:50051", server_credentials)
     server.start()
@@ -124,7 +129,9 @@ def secure_serve():
 if __name__ == "__main__":
     if settings.CERTIFICATE_GRPC_CRT and settings.CERTIFICATE_GRPC_KEY:
         print("Secure")
+        sys.stdout.flush()
         secure_serve()
     else:
         print("Insecure")
+        sys.stdout.flush()
         serve()
