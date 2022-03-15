@@ -1,3 +1,4 @@
+import sys
 import grpc
 from protos import books_pb2_grpc, books_pb2
 
@@ -40,5 +41,7 @@ def ssl_client(path, port, cert):
     print(f'[+] List books: {len(list(response))}')
 
 if __name__ == "__main__":
-    # insecure_client("127.0.0.1","50051")
-    ssl_client("localhost","5050", "djgrpc.crt")
+    _ , host, port, cert = sys.argv
+    ssl_client(host, port, cert)
+
+    

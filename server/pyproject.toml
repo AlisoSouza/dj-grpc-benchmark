@@ -11,6 +11,7 @@ grpcio-tools = "^1.43.0"
 djangorestframework = "^3.13.1"
 djangogrpcframework = "^0.2.1"
 django-environ = "^0.8.1"
+grpcio-reflection = "^1.44.0"
 
 [tool.poetry.dev-dependencies]
 psycopg2-binary = "~=2.9.1"
