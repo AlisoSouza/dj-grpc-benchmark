@@ -1,6 +1,18 @@
-import sys
+import os
 import grpc
+from dotenv import load_dotenv
 from protos import books_pb2_grpc, books_pb2
+
+# load environment variables
+load_dotenv()
+
+APP = os.getenv('APP')
+HOST = os.getenv('HOST')
+PORT = os.getenv('PORT')
+CERTIFICATE_GRPC_ROOT = os.getenv('CERTIFICATE_GRPC_ROOT')
+CERTIFICATE_GRPC_CRT = os.getenv('CERTIFICATE_GRPC_CRT')
+CERTIFICATE_GRPC_KEY = os.getenv('CERTIFICATE_GRPC_KEY')
+
 
 def insecure_client(path, port):
     with grpc.insecure_channel(f"{path}:{port}") as channel:
@@ -30,18 +42,27 @@ def insecure_client(path, port):
         )
         print(f'[+] Create book: {response}')
 
-def ssl_client(path, port, cert):
-    with open(cert, 'rb') as f:
-        creds = grpc.ssl_channel_credentials(f.read())
-    channel = grpc.secure_channel(f'{path}:{port}', creds)
+
+def ssl_client():
+    with open(CERTIFICATE_GRPC_CRT, 'rb') as f:
+        client_cert = f.read()
+    with open(CERTIFICATE_GRPC_KEY, 'rb') as f:
+        client_key = f.read()
+    with open(CERTIFICATE_GRPC_ROOT, 'rb') as f:
+        server_cert = f.read()
+
+    creds = grpc.ssl_channel_credentials(
+        root_certificates=server_cert,
+        private_key=client_key,
+        certificate_chain=client_cert)
+
+    channel = grpc.secure_channel(f'{HOST}:{PORT}', creds)
     stub = books_pb2_grpc.BookControllerStub(channel)
     response = stub.ListBook(
             books_pb2.BookListRequest(), None
         )
     print(f'[+] List books: {len(list(response))}')
 
-if __name__ == "__main__":
-    _ , host, port, cert = sys.argv
-    ssl_client(host, port, cert)
 
-    
+if __name__ == "__main__":
+    ssl_client()

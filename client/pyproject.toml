@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "dj-grpc-benchmark"
+name = "dj-grpc-benchmark-client"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
@@ -7,6 +7,7 @@ authors = ["Your Name <you@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.6"
 grpcio-tools = "^1.43.0"
+python-dotenv = "^0.19.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

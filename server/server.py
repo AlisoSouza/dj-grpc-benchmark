@@ -2,17 +2,16 @@ import os
 import grpc
 import django
 import sys
+from concurrent import futures
+from grpc_reflection.v1alpha import reflection
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 django.setup()
 
-
 from django.conf import settings
 from grpc_server.proto import books_pb2_grpc, books_pb2
-from concurrent import futures
 from books.models import Book
 from django.db.models import Q
-from grpc_reflection.v1alpha import reflection
 
 
 class BookService(
@@ -68,11 +67,10 @@ class BookService(
             title=book.title,
             year=book.year,
         )
- 
 
     def RetrieveBook(self, request, context):
         book = self.queryset.get(id=request.book_id)
-        
+
         return books_pb2.BookResponse(
             book_id=book.id,
             author=book.author,
@@ -83,7 +81,6 @@ class BookService(
             title=book.title,
             year=book.year,
         )
- 
 
 
 def serve():
@@ -102,6 +99,7 @@ def serve():
     print(f"Running server on port {port}")
     server.wait_for_termination()
 
+
 def secure_serve():
     port = "[::]:50051"
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -113,18 +111,18 @@ def secure_serve():
     with open(settings.CERTIFICATE_GRPC_CRT, 'rb') as f:
         certificate_chain = f.read()
     with open(settings.CERTIFICATE_GRPC_ROOT, 'rb') as f:
-        root_ca = f.read() 
+        root_ca = f.read()
     server_credentials = grpc.ssl_server_credentials(
         ((private_key, certificate_chain), ),
         root_certificates=root_ca,
         require_client_auth=True)
-    # Adding GreeterServicer to server omitted
+
     server.add_secure_port("[::]:50051", server_credentials)
+
     server.start()
     print(f"Running server on port {port}")
-    # Server sleep omitted
     server.wait_for_termination()
-    
+
 
 if __name__ == "__main__":
     if settings.CERTIFICATE_GRPC_CRT and settings.CERTIFICATE_GRPC_KEY:
