@@ -12,12 +12,18 @@ ARG BUILD_DEPS="\
 
 ARG RUNTIME_DEPS="\
   libmariadb3 \
-  librabbitmq4 \
-  netcat \
   gosu"
 
-ENV BUILD_DEPS=${BUILD_DEPS} \
-  RUNTIME_DEPS=${RUNTIME_DEPS}
+ARG PIP_VERSION="21.2.2"
+
+ARG SETUPTOOLS_VERSION="57.4.0"
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV BUILD_DEPS="${BUILD_DEPS}" \
+  RUNTIME_DEPS="${RUNTIME_DEPS}" \
+  PIP_VERSION="${PIP_VERSION}" \
+  SETUPTOOLS_VERSION="${SETUPTOOLS_VERSION}"
 
 ENV WORKDIR /app
 WORKDIR $WORKDIR
@@ -28,7 +34,7 @@ COPY poetry.lock pyproject.toml ./
 
 RUN apt-get update \
   && apt-get install --no-install-recommends --no-install-suggests -y ${BUILD_DEPS} \
-  && pip install --no-cache-dir -U pip==21.2.2 setuptools==57.4.0 poetry \
+  && pip install --no-cache-dir -U pip=="${PIP_VERSION}" setuptools=="${SETUPTOOLS_VERSION}" poetry \
   && poetry export -f requirements.txt --output requirements.txt --without-hashes \
   && pip install --no-cache-dir --ignore-installed --prefix=/install -r requirements.txt
 
