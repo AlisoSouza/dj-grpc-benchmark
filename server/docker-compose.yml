@@ -5,8 +5,8 @@ services:
     restart: on-failure
     build: .
     container_name: dj_grpc_benchmark
-    volumes: 
-      - ./server:/app
+    #volumes:
+    #  - ./server:/app
     ports:
       - 5050:50051
     environment:
@@ -14,4 +14,3 @@ services:
       - CERTIFICATE_GRPC_KEY=${CERTIFICATE_GRPC_KEY}
       - CERTIFICATE_GRPC_ROOT=${CERTIFICATE_GRPC_ROOT}
 
-      

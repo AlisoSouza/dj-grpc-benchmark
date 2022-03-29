@@ -1,27 +1,58 @@
-FROM python:3.6-slim
+FROM python:3-slim-buster AS base
 
-ENV WORKDIR /home/app
+ARG BUILD_DEPS="\
+    python3-dev default-libmysqlclient-dev \
+    build-essential \
+    libmariadbclient-dev \
+    git cmake \
+    autoconf pkg-config autoconf libtool automake \
+    librabbitmq-dev \
+    libmariadbclient-dev-compat \
+    bzip2 curl libpq-dev gettext libgdal-dev python3-cffi python3-gdal"
+
+ARG RUNTIME_DEPS="\
+  libmariadb3 \
+  gosu"
+
+ARG PIP_VERSION="21.2.2"
+
+ARG SETUPTOOLS_VERSION="57.4.0"
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV BUILD_DEPS="${BUILD_DEPS}" \
+  RUNTIME_DEPS="${RUNTIME_DEPS}" \
+  PIP_VERSION="${PIP_VERSION}" \
+  SETUPTOOLS_VERSION="${SETUPTOOLS_VERSION}"
+
+ENV WORKDIR /app
 WORKDIR $WORKDIR
 
+FROM base AS build
+
+COPY poetry.lock pyproject.toml ./
+
 RUN apt-get update \
- && apt-get install --no-install-recommends --no-install-suggests -y apt-utils \
- && apt-get install --no-install-recommends --no-install-suggests -y gcc bzip2 git curl nginx libpq-dev gettext \
-    libgdal-dev python3-cffi python3-gdal vim build-essential
+  && apt-get install --no-install-recommends --no-install-suggests -y ${BUILD_DEPS} \
+  && pip install --no-cache-dir -U pip=="${PIP_VERSION}" setuptools=="${SETUPTOOLS_VERSION}" poetry \
+  && poetry export -f requirements.txt --output requirements.txt --without-hashes \
+  && pip install --no-cache-dir --ignore-installed --prefix=/install -r requirements.txt
 
-RUN  pip install -U pip==21.2.2 setuptools==57.4.0
-RUN pip install poetry==1.1.12
-COPY pyproject.toml pyproject.toml
-COPY poetry.lock poetry.lock
-COPY djgrpc.crt djgrpc.crt
-COPY djgrpc.key djgrpc.key
-RUN chown root:root djgrpc.*
-RUN chmod 600 djgrpc.*
+FROM base
 
-RUN poetry config virtualenvs.create false \
-  && poetry install --no-interaction --no-ansi
+COPY --from=build /install /usr/local
+
+RUN apt-get update \
+  && SUDO_FORCE_REMOVE=yes apt-get remove --purge -y ${BUILD_DEPS} \
+  && apt-get autoremove -y \
+  && apt-get install -y --no-install-recommends ${RUNTIME_DEPS} \
+  && rm -rf /usr/share/man \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY . .
 
-RUN chmod +x ./run.sh
-EXPOSE 5050
-ENTRYPOINT ["./run.sh"]
+#RUN chmod +x /app/run.sh
+EXPOSE 50051
+ENTRYPOINT ["/app/run.sh"]
+
